@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Небесный вкус</title>
+    <style>
+        /* Стили для чистого и современного вида */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f8f9fa; color: #333; }
+        
+        /* Шапка */
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #0056b3; color: white; }
+        .nav-menu { text-align: center; padding: 15px; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-menu a { margin: 0 10px; text-decoration: none; color: #0056b3; font-weight: bold; }
+        
+        /* Корзина в шапке */
+        .cart-box { background: white; color: #333; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .btn-blue { background: #0056b3; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; font-weight: bold; }
+        
+        /* Сетка товаров */
+        .wrapper { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .card img { border-radius: 8px; margin-bottom: 10px; }
+        
+        /* Подвал */
+        footer { margin-top: 50px; padding: 30px; background: #343a40; color: white; text-align: center; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div>
+                <h1>Кафе «Небесный вкус»</h1>
+                <p>Мы готовим с любовью для вас! Мы готовим с любовью, чтобы каждый ваш день становился чуточку светлее. 
+                Ваше удовольствие — наш главный ингредиент! ✨</p>
+            </div>
+            <div class="cart-box">
+                <h3 style="margin:0 0 5px 0;">🛒 Ваша корзина</h3>
+                <p style="margin:0 0 10px 0;">Выбрано: <strong>{{ cart_count }}</strong></p>
+                <a href="{% url 'cart_view' %}" class="btn-blue">К оформлению</a>
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="{% url 'product_list' %}">Все</a> | 
+            <a href="{% url 'category_list' 'Бургеры' %}">Бургеры</a> | 
+            <a href="{% url 'category_list' 'Пицца' %}">Пицца</a> | 
+            <a href="{% url 'category_list' 'Напитки' %}">Напитки</a>
+        </nav>
+    </header>
+
+    <div class="wrapper">
+        <h2 style="text-align: center; margin-bottom: 30px;">Наше меню</h2>
+        <div class="menu-grid">
+            {% for product in products %}
+                <div class="card">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%; height:150px; object-fit:cover;">
+                    {% endif %}
+                    <h3 style="margin: 10px 0;">{{ product.name }}</h3>
+                    <p style="font-weight: bold; font-size: 1.1em; color: #0056b3;">{{ product.price }} руб.</p>
+                    <form method="post" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-blue">Добавить</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <h3>Контакты и адрес</h3>
+        <p>📍 ул. Ленина, 10 | 📞 +7 (999) 000-00-00</p>
+        <div class="map" style="margin-top: 20px;">
+            <iframe src="https://yandex.ru/map-widget/v1/?text=Ваш+город+улица+дом" width="100%" height="250" frameborder="0"></iframe>
+        </div>
+    </footer>
+</body>
+</html>

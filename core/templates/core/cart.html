@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина | Небесный вкус</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f9; color: #333; }
+        .cart-container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #0056b3; border-bottom: 2px solid #e3f2fd; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        .total-row { font-weight: bold; font-size: 1.2em; color: #0056b3; }
+        .btn-order { background: #0056b3; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        .btn-back { color: #666; text-decoration: none; margin-left: 20px; }
+    </style>
+</head>
+<body>
+<div class="cart-container">
+    <h1>🛒 Ваш заказ</h1>
+    <table>
+        <thead>
+            <tr><th>Товар</th><th>Цена</th></tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }} руб.</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="2">Ваша корзина пуста.</td></tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td>ИТОГО:</td>
+                <td>{{ total_price }} руб.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 30px;">
+       <form method="post" action="{% url 'create_order' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-order" style="border:none; cursor:pointer; font-size: 16px; font-family: inherit;">
+                Оформить заказ
+            </button>
+        </form>
+        
+        <a href="{% url 'product_list' %}" class="btn-back">← Вернуться в меню</a>
+    </div>
+</div>
+</body>
+</html>

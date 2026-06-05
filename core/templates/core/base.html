@@ -1,0 +1,7 @@
+{% for product in product_list %}
+    <div class="card">
+        <h3>{{ product.name }}</h3>
+        <p>Цена: {{ product.price }} руб.</p>
+        <a href="{% url 'product_detail' product.pk %}">Подробнее</a>
+    </div>
+{% endfor %}
